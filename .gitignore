@@ -1,0 +1,27 @@
+
+.env
+node_modules/
+
+# Additional files to keep out of GitHub
+.env.*
+!.env.example
+dist/
+build/
+coverage/
+*.log
+
+# Additional files to keep out of GitHub
+.env.*
+!.env.example
+dist/
+build/
+coverage/
+*.log
+
+# Additional files to keep out of GitHub
+.env.*
+!.env.example
+dist/
+build/
+coverage/
+*.log

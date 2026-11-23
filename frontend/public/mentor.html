@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaushByte Learn | Mentor Dashboard</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fa;
+            color: #172033;
+        }
+
+        button, input, textarea, select { font: inherit; }
+        button { cursor: pointer; }
+
+        .login-wrapper {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 32px;
+            background: white;
+            border: 1px solid #e3e7ef;
+            border-radius: 12px;
+        }
+
+        .login-card h1 { margin-top: 0; font-size: 25px; }
+        .login-card p { color: #647084; line-height: 1.5; }
+
+        .field { margin: 18px 0; }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d6dce7;
+            border-radius: 7px;
+            background: white;
+        }
+
+        textarea { min-height: 120px; resize: vertical; }
+
+        .primary-button {
+            padding: 11px 17px;
+            border: 0;
+            border-radius: 7px;
+            background: #2457d6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .primary-button:hover { background: #1946b8; }
+
+        .secondary-button {
+            padding: 9px 13px;
+            border: 1px solid #d6dce7;
+            border-radius: 7px;
+            background: white;
+            color: #26344b;
+        }
+
+        .message { margin-top: 14px; color: #b42318; font-size: 14px; }
+        .hidden { display: none !important; }
+
+        .layout {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 235px 1fr;
+        }
+
+        .sidebar {
+            padding: 25px 17px;
+            background: #17243b;
+            color: white;
+        }
+
+        .brand { margin: 0 0 35px; font-size: 19px; }
+
+        .sidebar button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 7px 0;
+            text-align: left;
+            color: #dce5f5;
+            background: transparent;
+            border: 0;
+            border-radius: 7px;
+        }
+
+        .sidebar button:hover,
+        .sidebar button.active {
+            background: #2b3b59;
+            color: white;
+        }
+
+        .main { min-width: 0; }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 28px;
+            background: white;
+            border-bottom: 1px solid #e5e9f0;
+        }
+
+        .topbar h2 { margin: 0; font-size: 20px; }
+        .content { padding: 28px; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card, .panel {
+            padding: 20px;
+            background: white;
+            border: 1px solid #e4e8ef;
+            border-radius: 10px;
+        }
+
+        .stat-card p {
+            margin: 0 0 10px;
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .stat-card strong { font-size: 27px; }
+        .panel { margin-bottom: 20px; }
+        .panel h3 { margin-top: 0; }
+
+        .table-wrap { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 13px 11px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        th { color: #667085; font-weight: 600; }
+
+        .link-button {
+            padding: 0;
+            border: 0;
+            background: none;
+            color: #2457d6;
+            font-weight: 600;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        pre {
+            max-height: 420px;
+            overflow: auto;
+            padding: 15px;
+            border-radius: 8px;
+            background: #111c2e;
+            color: #e5edff;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .feedback-item {
+            padding: 13px 0;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .muted { color: #667085; font-size: 14px; }
+
+        .student-info {
+            min-width: 180px;
+            line-height: 1.5;
+        }
+
+        .student-info strong {
+            display: block;
+            color: #172033;
+        }
+
+        .student-info span {
+            display: block;
+            color: #667085;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .student-id {
+            color: #667085;
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .student-card {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 16px;
+            margin-bottom: 18px;
+            background: #f5f7fb;
+            border: 1px solid #e4e8ef;
+            border-radius: 9px;
+        }
+
+        .student-card h3 { margin: 0 0 7px; }
+        .student-card p { margin: 5px 0; }
+
+        @media (max-width: 800px) {
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { padding: 14px; }
+            .brand { margin: 0 0 10px; }
+            .sidebar nav { display: flex; flex-wrap: wrap; }
+            .sidebar button { width: auto; margin: 3px; }
+            .content { padding: 16px; }
+            .stats { grid-template-columns: 1fr; }
+            .detail-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+<section id="loginScreen" class="login-wrapper">
+    <div class="login-card">
+        <h1>RaushByte Learn</h1>
+        <p>Mentor Portal</p>
+
+        <form id="loginForm">
+            <div class="field">
+                <label for="email">Email address</label>
+                <input id="email" type="email" required autocomplete="username">
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" type="password" required autocomplete="current-password">
+            </div>
+
+            <button class="primary-button" type="submit" id="loginButton">
+                Sign in
+            </button>
+        </form>
+
+        <div id="loginMessage" class="message"></div>
+    </div>
+</section>
+
+<section id="dashboard" class="layout hidden">
+    <aside class="sidebar">
+        <h2 class="brand">RaushByte Learn</h2>
+        <nav>
+            <button class="active" data-page="overview">Overview</button>
+            <button data-page="submissions">Student Submissions</button>
+            <button data-page="reports">Reports & History</button>
+            <button id="logoutButton">Sign out</button>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <h2 id="pageTitle">Mentor Overview</h2>
+            <span id="mentorName" class="muted">Mentor</span>
+        </header>
+
+        <div class="content">
+            <section id="overviewPage">
+                <div class="stats">
+                    <div class="stat-card">
+                        <p>Total submissions</p>
+                        <strong id="submissionCount">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <p>Mentor feedback entries</p>
+                        <strong id="feedbackCount">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <p>Students represented</p>
+                        <strong id="studentCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Recent student submissions</h3>
+                    <div id="recentSubmissions" class="muted">Loading submissions...</div>
+                </div>
+            </section>
+
+            <section id="submissionsPage" class="hidden">
+                <div class="panel">
+                    <h3>Student Submissions</h3>
+                    <div id="submissionsTable" class="muted">Loading submissions...</div>
+                </div>
+            </section>
+
+            <section id="detailPage" class="hidden">
+                <button class="secondary-button" id="backButton">
+                    Back to submissions
+                </button>
+                <div id="submissionDetails" style="margin-top:18px">
+                    Loading submission...
+                </div>
+            </section>
+
+            <section id="reportsPage" class="hidden">
+                <div class="panel">
+                    <h3>Reports and Activity History</h3>
+                    <div id="reportsContent" class="muted">Loading reports...</div>
+                </div>
+            </section>
+        </div>
+    </main>
+</section>
+
+<script>
+    const API = "http://localhost:5000";
+    const TOKEN_KEY = "raushbyteMentorToken";
+
+    const loginScreen = document.getElementById("loginScreen");
+    const dashboard = document.getElementById("dashboard");
+    const loginMessage = document.getElementById("loginMessage");
+
+    let submissions = [];
+
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        })[character]);
+    }
+
+    function formatDate(value) {
+        if (!value) return "Not available";
+        const date = new Date(value);
+
+        return Number.isNaN(date.getTime())
+            ? "Not available"
+            : date.toLocaleString();
+    }
+
+    function getToken() {
+        return sessionStorage.getItem(TOKEN_KEY);
+    }
+
+    function studentIdentity(student, studentId) {
+        if (!student) {
+            return `
+                <div class="student-info">
+                    <strong>Student details unavailable</strong>
+                    <span class="student-id">ID: ${escapeHTML(studentId || "Unavailable")}</span>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="student-info">
+                <strong>${escapeHTML(student.name || "Unnamed student")}</strong>
+                <span>${escapeHTML(student.email || "Email unavailable")}</span>
+                <span class="student-id">ID: ${escapeHTML(studentId || "Unavailable")}</span>
+            </div>
+        `;
+    }
+
+    async function apiRequest(path, options = {}) {
+        const response = await fetch(`${API}${path}`, {
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...(getToken()
+                    ? { Authorization: `Bearer ${getToken()}` }
+                    : {}),
+                ...(options.headers || {})
+            }
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(
+                data.message || data.error || `Request failed (${response.status})`
+            );
+        }
+
+        return data;
+    }
+
+    async function verifyMentor() {
+        const data = await apiRequest("/api/auth/me");
+        const user = data.user || data;
+
+        if (user.role !== "mentor") {
+            throw new Error("This account does not have mentor access.");
+        }
+
+        document.getElementById("mentorName").textContent =
+            user.name || user.email || "Mentor";
+
+        loginScreen.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+
+        await loadOverview();
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const button = document.getElementById("loginButton");
+        button.disabled = true;
+        button.textContent = "Signing in...";
+        loginMessage.textContent = "";
+
+        try {
+            const response = await fetch(`${API}/api/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: document.getElementById("email").value.trim(),
+                    password: document.getElementById("password").value
+                })
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.message || data.error || "Login failed.");
+            }
+
+            const token = data.token || data.accessToken;
+
+            if (!token) {
+                throw new Error("Login response did not contain an authentication token.");
+            }
+
+            sessionStorage.setItem(TOKEN_KEY, token);
+            await verifyMentor();
+
+        } catch (error) {
+            sessionStorage.removeItem(TOKEN_KEY);
+            loginMessage.textContent = error.message;
+        } finally {
+            button.disabled = false;
+            button.textContent = "Sign in";
+        }
+    });
+
+    async function loadOverview() {
+        const data = await apiRequest("/api/mentor/submissions");
+        submissions = data.submissions || [];
+
+        const report = await apiRequest("/api/mentor/reports");
+        const feedback = report.mentorFeedback || [];
+
+        document.getElementById("submissionCount").textContent =
+            report.totalSubmissions ?? submissions.length;
+
+        document.getElementById("feedbackCount").textContent =
+            report.totalMentorReviews ?? feedback.length;
+
+        document.getElementById("studentCount").textContent =
+            new Set(submissions.map(item => item.studentId).filter(Boolean)).size;
+
+        renderSubmissionTable(
+            document.getElementById("recentSubmissions"),
+            submissions.slice(0, 5)
+        );
+
+        renderSubmissionTable(
+            document.getElementById("submissionsTable"),
+            submissions
+        );
+    }
+
+    function renderSubmissionTable(container, items) {
+        if (!items.length) {
+            container.innerHTML = "<p>No submissions found.</p>";
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Submission ID</th>
+                            <th>Language</th>
+                            <th>Submitted</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${items.map(item => `
+                            <tr>
+                                <td>${studentIdentity(item.student, item.studentId)}</td>
+                                <td>${escapeHTML(item.submissionId)}</td>
+                                <td>${escapeHTML(item.language || "Not specified")}</td>
+                                <td>${escapeHTML(formatDate(item.createdAt))}</td>
+                                <td>
+                                    <button class="link-button"
+                                        data-submission="${escapeHTML(item.submissionId)}">
+                                        View details
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    async function openSubmission(submissionId) {
+        showPage("detail");
+
+        const container = document.getElementById("submissionDetails");
+        container.textContent = "Loading submission details...";
+
+        try {
+            const data = await apiRequest(
+                `/api/mentor/submissions/${encodeURIComponent(submissionId)}`
+            );
+
+            const submission = data.submission;
+            const feedback = data.mentorFeedback || [];
+
+            container.innerHTML = `
+                <div class="panel">
+                    <h3>Submission Details</h3>
+
+                    <div class="student-card">
+                        <div>
+                            <h3>Student Information</h3>
+                            ${studentIdentity(submission.student, submission.studentId)}
+                        </div>
+                    </div>
+
+                    <p><strong>Submission ID:</strong>
+                        ${escapeHTML(submission.submissionId)}</p>
+                    <p><strong>Language:</strong>
+                        ${escapeHTML(submission.language || "Not specified")}</p>
+                    <p><strong>Submitted:</strong>
+                        ${escapeHTML(formatDate(submission.createdAt))}</p>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="panel">
+                        <h3>Submitted Code / Request</h3>
+                        <pre>${escapeHTML(JSON.stringify(submission.request, null, 2) || "No request available")}</pre>
+                    </div>
+
+                    <div class="panel">
+                        <h3>AI Review</h3>
+                        <pre>${escapeHTML(JSON.stringify(submission.result, null, 2) || "No AI review available")}</pre>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Previous Mentor Feedback</h3>
+                    ${
+                        feedback.length
+                        ? feedback.map(item => `
+                            <div class="feedback-item">
+                                <strong>Rating: ${escapeHTML(item.rating)} / 5</strong>
+                                <p>${escapeHTML(item.message)}</p>
+                                <span class="muted">
+                                    ${escapeHTML(item.mentorId?.name || "Mentor")}
+                                    · ${escapeHTML(formatDate(item.createdAt))}
+                                </span>
+                            </div>
+                        `).join("")
+                        : '<p class="muted">No mentor feedback has been submitted yet.</p>'
+                    }
+                </div>
+
+                <div class="panel">
+                    <h3>Send Mentor Feedback</h3>
+
+                    <form id="feedbackForm">
+                        <div class="field">
+                            <label for="rating">AI Review Rating</label>
+                            <select id="rating" required>
+                                <option value="">Choose a rating</option>
+                                <option value="1">1 - Poor</option>
+                                <option value="2">2 - Needs improvement</option>
+                                <option value="3">3 - Satisfactory</option>
+                                <option value="4">4 - Good</option>
+                                <option value="5">5 - Excellent</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="mentorMessage">Your feedback to the student</label>
+                            <textarea id="mentorMessage"
+                                minlength="2"
+                                maxlength="3000"
+                                required
+                                placeholder="Write constructive feedback for this student..."></textarea>
+                        </div>
+
+                        <button class="primary-button" type="submit">
+                            Send Feedback
+                        </button>
+
+                        <div id="feedbackMessage" class="message"></div>
+                    </form>
+                </div>
+            `;
+
+            document.getElementById("feedbackForm").addEventListener(
+                "submit",
+                async event => {
+                    event.preventDefault();
+
+                    const messageBox = document.getElementById("feedbackMessage");
+                    const button = event.currentTarget.querySelector("button");
+
+                    button.disabled = true;
+                    messageBox.textContent = "";
+
+                    try {
+                        await apiRequest("/api/mentor/feedback", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                submissionId: submission.submissionId,
+                                rating: Number(document.getElementById("rating").value),
+                                message: document.getElementById("mentorMessage").value.trim()
+                            })
+                        });
+
+                        await openSubmission(submission.submissionId);
+
+                    } catch (error) {
+                        messageBox.textContent = error.message;
+                    } finally {
+                        button.disabled = false;
+                    }
+                }
+            );
+
+        } catch (error) {
+            container.textContent = error.message;
+        }
+    }
+
+    async function loadReports() {
+        const container = document.getElementById("reportsContent");
+        container.textContent = "Loading reports...";
+
+        try {
+            const data = await apiRequest("/api/mentor/reports");
+
+            const events = [
+                ...(data.submissions || []).map(item => ({
+                    type: "Student submission",
+                    id: item.submissionId,
+                    studentId: item.studentId,
+                    student: item.student,
+                    date: item.createdAt
+                })),
+                ...(data.mentorFeedback || []).map(item => ({
+                    type: "Mentor feedback",
+                    id: item.submissionId,
+                    studentId: item.studentId,
+                    student: null,
+                    date: item.createdAt
+                }))
+            ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = `
+                <p>Total submissions:
+                    <strong>${escapeHTML(data.totalSubmissions ?? 0)}</strong>
+                </p>
+                <p>Total mentor feedback entries:
+                    <strong>${escapeHTML(data.totalMentorReviews ?? 0)}</strong>
+                </p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Student</th>
+                                <th>Submission ID</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${events.map(event => `
+                                <tr>
+                                    <td>${escapeHTML(event.type)}</td>
+                                    <td>${studentIdentity(event.student, event.studentId)}</td>
+                                    <td>${escapeHTML(event.id)}</td>
+                                    <td>${escapeHTML(formatDate(event.date))}</td>
+                                </tr>
+                            `).join("")}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+        } catch (error) {
+            container.textContent = error.message;
+        }
+    }
+
+    function showPage(page) {
+        const pages = {
+            overview: "overviewPage",
+            submissions: "submissionsPage",
+            detail: "detailPage",
+            reports: "reportsPage"
+        };
+
+        Object.entries(pages).forEach(([key, id]) => {
+            document.getElementById(id).classList.toggle("hidden", key !== page);
+        });
+
+        document.getElementById("pageTitle").textContent = {
+            overview: "Mentor Overview",
+            submissions: "Student Submissions",
+            detail: "Submission Details",
+            reports: "Reports & History"
+        }[page];
+
+        document.querySelectorAll("[data-page]").forEach(button => {
+            button.classList.toggle("active", button.dataset.page === page);
+        });
+    }
+
+    document.querySelectorAll("[data-page]").forEach(button => {
+        button.addEventListener("click", async () => {
+            const page = button.dataset.page;
+            showPage(page);
+
+            try {
+                if (page === "submissions" || page === "overview") {
+                    await loadOverview();
+                }
+
+                if (page === "reports") {
+                    await loadReports();
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    });
+
+    document.addEventListener("click", event => {
+        const button = event.target.closest("[data-submission]");
+
+        if (button) {
+            openSubmission(button.dataset.submission);
+        }
+    });
+
+    document.getElementById("backButton").addEventListener("click", () => {
+        showPage("submissions");
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", () => {
+        sessionStorage.removeItem(TOKEN_KEY);
+        dashboard.classList.add("hidden");
+        loginScreen.classList.remove("hidden");
+        document.getElementById("password").value = "";
+        loginMessage.textContent = "";
+    });
+
+    async function initialize() {
+        if (!getToken()) return;
+
+        try {
+            await verifyMentor();
+        } catch (error) {
+            sessionStorage.removeItem(TOKEN_KEY);
+            loginMessage.textContent = error.message;
+            loginScreen.classList.remove("hidden");
+            dashboard.classList.add("hidden");
+        }
+    }
+
+    initialize();
+</script>
+
+</body>
+</html>
